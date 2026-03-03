@@ -20,7 +20,7 @@ Progress is recorded **week-wise and day-wise**, covering multiple Use Cases (UC
 
 ---
 
-## 🌿 Branch Information
+## Branch Information
 
 | Branch Name                       | Purpose                                                 |
 | --------------------------------- | ------------------------------------------------------- |
@@ -34,7 +34,7 @@ Progress is recorded **week-wise and day-wise**, covering multiple Use Cases (UC
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 QuantityMeasurementApp/
 │
@@ -55,7 +55,7 @@ QuantityMeasurementApp/
 
 ---
 
-## 🎯 Use Case Details
+## Use Case Details
 
 ### UC1 – Feet Equality
 
