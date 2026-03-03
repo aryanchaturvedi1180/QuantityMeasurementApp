@@ -34,24 +34,27 @@ Progress is recorded **week-wise and day-wise**, covering multiple Use Cases (UC
 
 ---
 
-## Project Structure
+## 📂 Project Structure
 
+```
 QuantityMeasurementApp/
 │
-├── main
+├── main/
 │   └── README.md
 │
-├── dev
+├── dev/ (Branch)
 │
-├── feature/UC1-FeetEquality
+├── feature/UC1-FeetEquality/ (Branch)
 │
-├── feature/UC2-InchEquality
+├── feature/UC2-InchEquality/ (Branch)
 │
-├── feature/UC3-GenericLength
+├── feature/UC3-GenericLength/ (Branch)
 │
-├── feature/UC4-ExtendedUnitSupport
+├── feature/UC4-YardEquality/ (Branch)
 │
-└── feature/UC5-UnitConversion
+└── feature/UC5-UnitConversion/ (Branch)
+```
+
 
 ---
 
