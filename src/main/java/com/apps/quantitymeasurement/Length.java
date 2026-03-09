@@ -83,20 +83,47 @@ public class Length {
 	    return convertedValue;
 	}
 	
+	// UC6: default addition (result in unit of first operand)
 	public Length add(Length thatLength) {
 
 	    if (thatLength == null) {
 	        throw new IllegalArgumentException("Length cannot be null");
 	    }
 
-	    double base1 = this.convertToBaseUnit();
-	    double base2 = thatLength.convertToBaseUnit();
+	    return addAndConvert(thatLength, this.unit);
+	}
+	
+	// UC7: addition with explicit target unit
+	public Length add(Length length, LengthUnit targetUnit) {
 
+	    if (length == null) {
+	        throw new IllegalArgumentException("Length cannot be null");
+	    }
+
+	    if (targetUnit == null) {
+	        throw new IllegalArgumentException("Target unit cannot be null");
+	    }
+
+	    return addAndConvert(length, targetUnit);
+	}
+	
+	private Length addAndConvert(Length length, LengthUnit targetUnit) {
+
+	    if (!Double.isFinite(this.value) || !Double.isFinite(length.value)) {
+	        throw new IllegalArgumentException("Length values must be finite numbers");
+	    }
+
+	    // Convert both to base unit (inches)
+	    double base1 = this.convertToBaseUnit();
+	    double base2 = length.convertToBaseUnit();
+
+	    // Add
 	    double sumInBase = base1 + base2;
 
-	    double result = convertFromBaseToTargetUnit(sumInBase, this.unit);
+	    // Convert to target unit
+	    double convertedValue = convertFromBaseToTargetUnit(sumInBase, targetUnit);
 
-	    return new Length(result, this.unit);
+	    return new Length(convertedValue, targetUnit);
 	}
 	
 	@Override

@@ -43,6 +43,16 @@ public class QuantityMeasurementApp {
 
         return result;
     }
+    
+    public static Length demonstrateLengthAddition(
+            Length length1, Length length2, LengthUnit targetUnit) {
+
+        Length result = length1.add(length2, targetUnit);
+
+        System.out.println(length1 + " + " + length2 + " = " + result);
+
+        return result;
+    }
 
     public static void main(String[] args) {
 
@@ -119,6 +129,29 @@ public class QuantityMeasurementApp {
         demonstrateLengthAddition(
                 new Length(5.0, Length.LengthUnit.FEET),
                 new Length(3.0, Length.LengthUnit.FEET)
+        );
+        
+        System.out.println("\n---- Length Addition With Target Unit ----");
+
+        // 1 Foot + 12 Inches = result in Yards
+        demonstrateLengthAddition(
+        		new Length(1.0, LengthUnit.FEET),
+        		new Length(12.0, LengthUnit.INCHES),
+        		LengthUnit.YARDS
+        );
+
+        // 1 Yard + 3 Feet = result in Feet
+        demonstrateLengthAddition(
+        	new Length(1.0, LengthUnit.YARDS),
+            new Length(3.0, LengthUnit.FEET),
+            LengthUnit.FEET
+        );
+
+        // 100 cm + 1 foot = result in Inches
+        demonstrateLengthAddition(
+             new Length(100.0, LengthUnit.CENTIMETERS),
+             new Length(1.0, LengthUnit.FEET),
+             LengthUnit.INCHES
         );
         
     }
