@@ -6,33 +6,50 @@ public class QuantityMeasurementApp {
         return length1.equals(length2);
     }
 
-    public static void demonstrateFeetEquality() {
-        Length oneFootA = new Length(1.0, Length.LengthUnit.FEET);
-        Length oneFootB = new Length(1.0, Length.LengthUnit.FEET);
+    public static boolean demonstrateLengthComparison(
+            double value1, Length.LengthUnit unit1,
+            double value2, Length.LengthUnit unit2) {
 
-        boolean equal = demonstrateLengthEquality(oneFootA, oneFootB);
-        System.out.println("Feet equality: 1.0 ft == 1.0 ft ? " + equal);
-    }
+        Length length1 = new Length(value1, unit1);
+        Length length2 = new Length(value2, unit2);
 
-    public static void demonstrateInchesEquality() {
-        Length oneInchA = new Length(1.0, Length.LengthUnit.INCHES);
-        Length oneInchB = new Length(1.0, Length.LengthUnit.INCHES);
+        boolean result = demonstrateLengthEquality(length1, length2);
 
-        boolean equal = demonstrateLengthEquality(oneInchA, oneInchB);
-        System.out.println("Inches equality: 1.0 in == 1.0 in ? " + equal);
-    }
+        System.out.println(value1 + " " + unit1 +" == " + value2 + " " + unit2 + " ? " + result);
 
-    public static void demonstrateFeetInchesComparison() {
-        Length oneFoot = new Length(1.0, Length.LengthUnit.FEET);
-        Length twelveInches = new Length(12.0, Length.LengthUnit.INCHES);
-
-        boolean equal = demonstrateLengthEquality(oneFoot, twelveInches);
-        System.out.println("Feet-Inches comparison: 1.0 ft == 12.0 in ? " + equal);
+        return result;
     }
 
     public static void main(String[] args) {
-        demonstrateFeetEquality();
-        demonstrateInchesEquality();
-        demonstrateFeetInchesComparison();
+
+        // Demonstrate Feet and Inches comparison
+        demonstrateLengthComparison(
+                1.0, Length.LengthUnit.FEET,
+                12.0, Length.LengthUnit.INCHES
+        );
+
+        // Demonstrate Yards and Inches comparison
+        demonstrateLengthComparison(
+                1.0, Length.LengthUnit.YARDS,
+                36.0, Length.LengthUnit.INCHES
+        );
+
+        // Demonstrate Centimeters and Inches comparison
+        demonstrateLengthComparison(
+                100.0, Length.LengthUnit.CENTIMETERS,
+                39.3701, Length.LengthUnit.INCHES
+        );
+
+        // Demonstrate Feet and Yards comparison
+        demonstrateLengthComparison(
+                3.0, Length.LengthUnit.FEET,
+                1.0, Length.LengthUnit.YARDS
+        );
+
+        // Demonstrate Centimeters and Feet comparison
+        demonstrateLengthComparison(
+                30.48, Length.LengthUnit.CENTIMETERS,
+                1.0, Length.LengthUnit.FEET
+        );
     }
 }
