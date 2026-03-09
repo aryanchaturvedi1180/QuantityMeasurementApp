@@ -77,5 +77,23 @@ public class QuantityMeasurementApp {
         demonstrateAddition(w1, w2);
 
         demonstrateAddition(w1, w2, WeightUnit.POUND);
+        
+        
+        Quantity<VolumeUnit> v1 =
+                new Quantity<>(1, VolumeUnit.LITRE);
+
+        Quantity<VolumeUnit> v2 =
+                new Quantity<>(1000, VolumeUnit.MILLILITRE);
+
+        Quantity<VolumeUnit> v3 =
+                new Quantity<>(1, VolumeUnit.GALLON);
+
+        demonstrateEquality(v1, v2);
+
+        demonstrateConversion(v1, VolumeUnit.MILLILITRE);
+
+        demonstrateAddition(v1, v2);
+
+        demonstrateAddition(v1, v3, VolumeUnit.MILLILITRE);
     }
 }
