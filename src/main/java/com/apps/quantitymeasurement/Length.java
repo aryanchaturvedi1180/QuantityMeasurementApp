@@ -69,6 +69,36 @@ public class Length {
 		return new Length(targetLength, targetUnit);
 	}
 	
+	private double convertFromBaseToTargetUnit(double lengthInInches, LengthUnit targetUnit) {
+
+	    if (targetUnit == null) {
+	        throw new IllegalArgumentException("Target unit cannot be null");
+	    }
+
+	    double convertedValue = lengthInInches / targetUnit.getConversionFactor();
+
+	    // round to 2 decimal places
+	    convertedValue = (double) Math.round(convertedValue * 100) / 100;
+
+	    return convertedValue;
+	}
+	
+	public Length add(Length thatLength) {
+
+	    if (thatLength == null) {
+	        throw new IllegalArgumentException("Length cannot be null");
+	    }
+
+	    double base1 = this.convertToBaseUnit();
+	    double base2 = thatLength.convertToBaseUnit();
+
+	    double sumInBase = base1 + base2;
+
+	    double result = convertFromBaseToTargetUnit(sumInBase, this.unit);
+
+	    return new Length(result, this.unit);
+	}
+	
 	@Override
 	public String toString() {
 		return value + " " + unit.toString();
