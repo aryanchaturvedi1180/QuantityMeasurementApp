@@ -65,5 +65,16 @@ public class QuantityMeasurementApp {
                 new Length(12.0, LengthUnit.INCHES),
                 LengthUnit.YARDS
         );
+        
+        Weight w1 = new Weight(1.0, WeightUnit.KILOGRAM);
+        Weight w2 = new Weight(1000.0, WeightUnit.GRAM);
+
+        System.out.println(w1.equals(w2));
+
+        System.out.println(w1.convertTo(WeightUnit.POUND));
+
+        System.out.println(w1.add(w2));
+
+        System.out.println(w1.add(w2, WeightUnit.POUND));
     }
 }

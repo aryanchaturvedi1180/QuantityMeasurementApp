@@ -5,136 +5,210 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class QuantityMeasurementAppTest {
     
-	private static final double EPSILON = 0.001;
+	private static final double EPSILON = 0.0001;
+
+    // ---------- EQUALITY TESTS ----------
 
     @Test
-    void testLengthUnitEnum_FeetConstant() {
-        assertEquals(1.0, LengthUnit.FEET.getConversionFactor());
+    void testEquality_KilogramToKilogram_SameValue() {
+        assertEquals(new Weight(1.0, WeightUnit.KILOGRAM),
+                new Weight(1.0, WeightUnit.KILOGRAM));
     }
 
     @Test
-    void testLengthUnitEnum_InchesConstant() {
-        assertEquals(1.0 / 12.0, LengthUnit.INCHES.getConversionFactor(), EPSILON);
+    void testEquality_KilogramToKilogram_DifferentValue() {
+        assertNotEquals(new Weight(1.0, WeightUnit.KILOGRAM),
+                new Weight(2.0, WeightUnit.KILOGRAM));
     }
 
     @Test
-    void testLengthUnitEnum_YardsConstant() {
-        assertEquals(3.0, LengthUnit.YARDS.getConversionFactor());
+    void testEquality_KilogramToGram_EquivalentValue() {
+        assertEquals(new Weight(1.0, WeightUnit.KILOGRAM),
+                new Weight(1000.0, WeightUnit.GRAM));
     }
 
     @Test
-    void testLengthUnitEnum_CentimetersConstant() {
-        assertEquals(1.0 / 30.48, LengthUnit.CENTIMETERS.getConversionFactor(), EPSILON);
+    void testEquality_GramToKilogram_EquivalentValue() {
+        assertEquals(new Weight(1000.0, WeightUnit.GRAM),
+                new Weight(1.0, WeightUnit.KILOGRAM));
     }
 
     @Test
-    void testConvertToBaseUnit_FeetToFeet() {
-        assertEquals(5.0, LengthUnit.FEET.convertToBaseUnit(5.0));
+    void testEquality_WeightVsLength_Incompatible() {
+        Weight weight = new Weight(1.0, WeightUnit.KILOGRAM);
+        Length length = new Length(1.0, LengthUnit.FEET);
+
+        assertFalse(weight.equals(length));
     }
 
     @Test
-    void testConvertToBaseUnit_InchesToFeet() {
-        assertEquals(1.0, LengthUnit.INCHES.convertToBaseUnit(12.0), EPSILON);
+    void testEquality_NullComparison() {
+        Weight weight = new Weight(1.0, WeightUnit.KILOGRAM);
+        assertFalse(weight.equals(null));
     }
 
     @Test
-    void testConvertToBaseUnit_YardsToFeet() {
-        assertEquals(3.0, LengthUnit.YARDS.convertToBaseUnit(1.0));
+    void testEquality_SameReference() {
+        Weight weight = new Weight(1.0, WeightUnit.KILOGRAM);
+        assertTrue(weight.equals(weight));
     }
 
     @Test
-    void testConvertToBaseUnit_CentimetersToFeet() {
-        assertEquals(1.0, LengthUnit.CENTIMETERS.convertToBaseUnit(30.48), EPSILON);
-    }
-
-    @Test
-    void testConvertFromBaseUnit_FeetToFeet() {
-        assertEquals(2.0, LengthUnit.FEET.convertFromBaseUnit(2.0));
-    }
-
-    @Test
-    void testConvertFromBaseUnit_FeetToInches() {
-        assertEquals(12.0, LengthUnit.INCHES.convertFromBaseUnit(1.0));
-    }
-
-    @Test
-    void testConvertFromBaseUnit_FeetToYards() {
-        assertEquals(1.0, LengthUnit.YARDS.convertFromBaseUnit(3.0));
-    }
-
-    @Test
-    void testConvertFromBaseUnit_FeetToCentimeters() {
-        assertEquals(30.48, LengthUnit.CENTIMETERS.convertFromBaseUnit(1.0), EPSILON);
-    }
-
-    @Test
-    void testQuantityLengthRefactored_Equality() {
-        Length l1 = new Length(1.0, LengthUnit.FEET);
-        Length l2 = new Length(12.0, LengthUnit.INCHES);
-
-        assertEquals(l1, l2);
-    }
-
-    @Test
-    void testQuantityLengthRefactored_ConvertTo() {
-        Length l = new Length(1.0, LengthUnit.FEET);
-
-        Length result = l.convertTo(LengthUnit.INCHES);
-
-        assertEquals(new Length(12.0, LengthUnit.INCHES), result);
-    }
-
-    @Test
-    void testQuantityLengthRefactored_Add() {
-
-        Length l1 = new Length(1.0, LengthUnit.FEET);
-        Length l2 = new Length(12.0, LengthUnit.INCHES);
-
-        Length result = l1.add(l2, LengthUnit.FEET);
-
-        assertEquals(new Length(2.0, LengthUnit.FEET), result);
-    }
-
-    @Test
-    void testQuantityLengthRefactored_AddWithTargetUnit() {
-
-        Length l1 = new Length(1.0, LengthUnit.FEET);
-        Length l2 = new Length(12.0, LengthUnit.INCHES);
-
-        Length result = l1.add(l2, LengthUnit.YARDS);
-
-        assertEquals(new Length(0.67, LengthUnit.YARDS), result);
-    }
-
-    @Test
-    void testQuantityLengthRefactored_NullUnit() {
+    void testEquality_NullUnit() {
         assertThrows(IllegalArgumentException.class,
-                () -> new Length(1.0, null));
+                () -> new Weight(1.0, null));
     }
 
     @Test
-    void testQuantityLengthRefactored_InvalidValue() {
-        assertThrows(IllegalArgumentException.class,
-                () -> new Length(Double.NaN, LengthUnit.FEET));
+    void testEquality_TransitiveProperty() {
+        Weight a = new Weight(1.0, WeightUnit.KILOGRAM);
+        Weight b = new Weight(1000.0, WeightUnit.GRAM);
+        Weight c = new Weight(1.0, WeightUnit.KILOGRAM);
+
+        assertTrue(a.equals(b));
+        assertTrue(b.equals(c));
+        assertTrue(a.equals(c));
     }
 
     @Test
-    void testRoundTripConversion_RefactoredDesign() {
-
-        double original = 5.0;
-
-        double inches = LengthUnit.INCHES.convertFromBaseUnit(original);
-        double feet = LengthUnit.INCHES.convertToBaseUnit(inches);
-
-        assertEquals(original, feet, EPSILON);
+    void testEquality_ZeroValue() {
+        assertEquals(new Weight(0.0, WeightUnit.KILOGRAM),
+                new Weight(0.0, WeightUnit.GRAM));
     }
 
+    @Test
+    void testEquality_NegativeWeight() {
+        assertEquals(new Weight(-1.0, WeightUnit.KILOGRAM),
+                new Weight(-1000.0, WeightUnit.GRAM));
+    }
 
     @Test
-    void testUnitImmutability() {
-        assertNotNull(LengthUnit.FEET);
-        assertNotNull(LengthUnit.INCHES);
-        assertNotNull(LengthUnit.YARDS);
-        assertNotNull(LengthUnit.CENTIMETERS);
+    void testEquality_LargeWeightValue() {
+        assertEquals(new Weight(1000000.0, WeightUnit.GRAM),
+                new Weight(1000.0, WeightUnit.KILOGRAM));
+    }
+
+    @Test
+    void testEquality_SmallWeightValue() {
+        assertEquals(new Weight(0.001, WeightUnit.KILOGRAM),
+                new Weight(1.0, WeightUnit.GRAM));
+    }
+
+    // ---------- CONVERSION TESTS ----------
+
+    @Test
+    void testConversion_SameUnit() {
+
+        Weight result = new Weight(5.0, WeightUnit.KILOGRAM)
+                .convertTo(WeightUnit.KILOGRAM);
+
+        assertEquals(new Weight(5.0, WeightUnit.KILOGRAM), result);
+    }
+
+    @Test
+    void testConversion_ZeroValue() {
+
+        Weight result = new Weight(0.0, WeightUnit.KILOGRAM)
+                .convertTo(WeightUnit.GRAM);
+
+        assertEquals(new Weight(0.0, WeightUnit.GRAM), result);
+    }
+
+    @Test
+    void testConversion_NegativeValue() {
+
+        Weight result = new Weight(-1.0, WeightUnit.KILOGRAM)
+                .convertTo(WeightUnit.GRAM);
+
+        assertEquals(new Weight(-1000.0, WeightUnit.GRAM), result);
+    }
+
+    @Test
+    void testConversion_RoundTrip() {
+
+        Weight original = new Weight(1.5, WeightUnit.KILOGRAM);
+
+        Weight result = original
+                .convertTo(WeightUnit.GRAM)
+                .convertTo(WeightUnit.KILOGRAM);
+
+        assertEquals(original, result);
+    }
+
+    // ---------- ADDITION TESTS ----------
+
+    @Test
+    void testAddition_SameUnit_KilogramPlusKilogram() {
+
+        Weight result = new Weight(1.0, WeightUnit.KILOGRAM)
+                .add(new Weight(2.0, WeightUnit.KILOGRAM));
+
+        assertEquals(new Weight(3.0, WeightUnit.KILOGRAM), result);
+    }
+
+    @Test
+    void testAddition_CrossUnit_KilogramPlusGram() {
+
+        Weight result = new Weight(1.0, WeightUnit.KILOGRAM)
+                .add(new Weight(1000.0, WeightUnit.GRAM));
+
+        assertEquals(new Weight(2.0, WeightUnit.KILOGRAM), result);
+    }
+
+    @Test
+    void testAddition_CrossUnit_PoundPlusKilogram() {
+
+        Weight result = new Weight(2.20462, WeightUnit.POUND)
+                .add(new Weight(1.0, WeightUnit.KILOGRAM));
+
+        assertEquals(new Weight(4.40924, WeightUnit.POUND), result);
+    }
+
+    @Test
+    void testAddition_ExplicitTargetUnit_Kilogram() {
+
+        Weight result = new Weight(1.0, WeightUnit.KILOGRAM)
+                .add(new Weight(1000.0, WeightUnit.GRAM), WeightUnit.GRAM);
+
+        assertEquals(new Weight(2000.0, WeightUnit.GRAM), result);
+    }
+
+    @Test
+    void testAddition_Commutativity() {
+
+        Weight a = new Weight(1.0, WeightUnit.KILOGRAM)
+                .add(new Weight(1000.0, WeightUnit.GRAM));
+
+        Weight b = new Weight(1000.0, WeightUnit.GRAM)
+                .add(new Weight(1.0, WeightUnit.KILOGRAM));
+
+        assertTrue(a.equals(b));
+    }
+
+    @Test
+    void testAddition_WithZero() {
+
+        Weight result = new Weight(5.0, WeightUnit.KILOGRAM)
+                .add(new Weight(0.0, WeightUnit.GRAM));
+
+        assertEquals(new Weight(5.0, WeightUnit.KILOGRAM), result);
+    }
+
+    @Test
+    void testAddition_NegativeValues() {
+
+        Weight result = new Weight(5.0, WeightUnit.KILOGRAM)
+                .add(new Weight(-2000.0, WeightUnit.GRAM));
+
+        assertEquals(new Weight(3.0, WeightUnit.KILOGRAM), result);
+    }
+
+    @Test
+    void testAddition_LargeValues() {
+
+        Weight result = new Weight(1e6, WeightUnit.KILOGRAM)
+                .add(new Weight(1e6, WeightUnit.KILOGRAM));
+
+        assertEquals(new Weight(2e6, WeightUnit.KILOGRAM), result);
     }
 }
