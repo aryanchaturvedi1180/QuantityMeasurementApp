@@ -2,58 +2,37 @@ package com.apps.quantitymeasurement;
 
 public class QuantityMeasurementApp {
 
-    public static class Feet {
-        private final double value;
-
-        public Feet(double value) {
-            this.value = value;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) return true;
-            if (obj == null || getClass() != obj.getClass()) return false;
-            Feet other = (Feet) obj;
-            return Double.compare(this.value, other.value) == 0;
-        }
-
-        @Override
-        public int hashCode() {
-            return Double.hashCode(value);
-        }
+    public static boolean demonstrateLengthEquality(Length length1, Length length2) {
+        return length1.equals(length2);
     }
 
-    public static class Inches {
-        private final double value;
+    public static void demonstrateFeetEquality() {
+        Length oneFootA = new Length(1.0, Length.LengthUnit.FEET);
+        Length oneFootB = new Length(1.0, Length.LengthUnit.FEET);
 
-        public Inches(double value) {
-            this.value = value;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (this == obj) return true;
-            if (obj == null || getClass() != obj.getClass()) return false;
-            Inches other = (Inches) obj;
-            return Double.compare(this.value, other.value) == 0;
-        }
-
-        @Override
-        public int hashCode() {
-            return Double.hashCode(value);
-        }
+        boolean equal = demonstrateLengthEquality(oneFootA, oneFootB);
+        System.out.println("Feet equality: 1.0 ft == 1.0 ft ? " + equal);
     }
 
-    public static boolean areFeetEqual(double v1, double v2) {
-        return new Feet(v1).equals(new Feet(v2));
+    public static void demonstrateInchesEquality() {
+        Length oneInchA = new Length(1.0, Length.LengthUnit.INCHES);
+        Length oneInchB = new Length(1.0, Length.LengthUnit.INCHES);
+
+        boolean equal = demonstrateLengthEquality(oneInchA, oneInchB);
+        System.out.println("Inches equality: 1.0 in == 1.0 in ? " + equal);
     }
 
-    public static boolean areInchesEqual(double v1, double v2) {
-        return new Inches(v1).equals(new Inches(v2));
+    public static void demonstrateFeetInchesComparison() {
+        Length oneFoot = new Length(1.0, Length.LengthUnit.FEET);
+        Length twelveInches = new Length(12.0, Length.LengthUnit.INCHES);
+
+        boolean equal = demonstrateLengthEquality(oneFoot, twelveInches);
+        System.out.println("Feet-Inches comparison: 1.0 ft == 12.0 in ? " + equal);
     }
 
     public static void main(String[] args) {
-        System.out.println("Are Feet equal? "+ areFeetEqual(1.0, 1.0));
-        System.out.println("Are Inches Equal? "+ areInchesEqual(1.0, 1.0));
+        demonstrateFeetEquality();
+        demonstrateInchesEquality();
+        demonstrateFeetInchesComparison();
     }
 }
