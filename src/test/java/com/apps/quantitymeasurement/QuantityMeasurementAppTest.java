@@ -1,45 +1,69 @@
 package com.apps.quantitymeasurement;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
 
-public class QuantityMeasurementAppTest {
-	
-	@Test
-    void testFeetEquality_SameValue() {
-		QuantityMeasurementApp.Feet feet1 = new QuantityMeasurementApp.Feet(5.0);
-		QuantityMeasurementApp.Feet feet2 = new QuantityMeasurementApp.Feet(5.0);
-
-        assertTrue(feet1.equals(feet2));
+class QuantityMeasurementAppTest {
+    // Feet tests
+    @Test
+    void testFeet_SameValue() {
+    	
+        assertTrue(QuantityMeasurementApp.areFeetEqual(1.0, 1.0));
     }
-	
-	@Test
-    void testFeetEquality_DifferentValue() {
-		QuantityMeasurementApp.Feet feet1 = new QuantityMeasurementApp.Feet(5.0);
-		QuantityMeasurementApp.Feet feet2 = new QuantityMeasurementApp.Feet(6.0);
 
-        assertFalse(feet1.equals(feet2));
+    @Test
+    void testFeet_DifferentValue() {
+    	
+        assertFalse(QuantityMeasurementApp.areFeetEqual(1.0, 2.0));
     }
-	
-	@Test
-    void testFeetEquality_SameReference() {
-		QuantityMeasurementApp.Feet feet1 = new QuantityMeasurementApp.Feet(5.0);
 
-        assertTrue(feet1.equals(feet1));
+    @Test
+    void testFeet_NullComparison() {
+    	
+        QuantityMeasurementApp.Feet f = new QuantityMeasurementApp.Feet(1.0);
+        assertFalse(f.equals(null));
     }
-	
-	@Test
-    void testFeetEquality_NullComparison() {
-		QuantityMeasurementApp.Feet feet1 = new QuantityMeasurementApp.Feet(5.0);
 
-        assertFalse(feet1.equals(null));
+    @Test
+    void testFeet_SameReference() {
+        QuantityMeasurementApp.Feet f = new QuantityMeasurementApp.Feet(1.0);
+        assertTrue(f.equals(f));
     }
-	
-	void testFeetEquality_DifferentObjectType() {
-		QuantityMeasurementApp.Feet feet1 = new QuantityMeasurementApp.Feet(5.0);
 
-        assertFalse(feet1.equals("5.0"));
+    @Test
+    void testFeet_NonNumeric() {
+        QuantityMeasurementApp.Feet f = new QuantityMeasurementApp.Feet(1.0);
+        assertFalse(f.equals("1.0"));
+    }
+
+    // Inches tests
+    @Test
+    void testInches_SameValue() {
+        assertTrue(QuantityMeasurementApp.areInchesEqual(1.0, 1.0));
+    }
+
+    @Test
+    void testInches_DifferentValue() {
+        assertFalse(QuantityMeasurementApp.areInchesEqual(1.0, 2.0));
+    }
+
+    @Test
+    void testInches_NullComparison() {
+    	
+        QuantityMeasurementApp.Inches i = new QuantityMeasurementApp.Inches(1.0);
+        assertFalse(i.equals(null));
+    }
+
+    @Test
+    void testInches_SameReference() {
+        QuantityMeasurementApp.Inches i = new QuantityMeasurementApp.Inches(1.0);
+        assertTrue(i.equals(i));
+        
+    }
+
+    @Test
+    void testInches_NonNumeric() {
+        QuantityMeasurementApp.Inches i = new QuantityMeasurementApp.Inches(1.0);
+        assertFalse(i.equals("1.0"));
     }
 }
