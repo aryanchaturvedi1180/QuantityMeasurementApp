@@ -5,7 +5,6 @@ public class Length {
 	private LengthUnit unit;
 
 	public enum LengthUnit {
-		
 		FEET(12.0),
 		INCHES(1.0),
 		YARDS(36.0),
@@ -28,7 +27,6 @@ public class Length {
 	}
 	
 	private double convertToBaseUnit() {
-		
 		return value * unit.getConversionFactor();
 	}
 	
@@ -45,6 +43,35 @@ public class Length {
 			return false;
 		}
 		return compare((Length) o);
+	}
+	
+    @Override
+    public int hashCode() {
+    	
+        return Double.hashCode(convertToBaseUnit());
+    }
+	
+	public Length convertTo(LengthUnit targetUnit) {
+		if (targetUnit == null) {
+			throw new IllegalArgumentException("TargetLength cannot be null.");
+		}
+		
+		// find base length
+		double baseLength = this.convertToBaseUnit();
+		
+		// convert to target length
+		double conversionFactor = targetUnit.conversionFactor;
+		double targetLength = baseLength / conversionFactor;
+		
+		// round off to 2 decimal places
+		targetLength = (double) Math.round(targetLength * 100) / 100;
+		
+		return new Length(targetLength, targetUnit);
+	}
+	
+	@Override
+	public String toString() {
+		return value + " " + unit.toString();
 	}
 	
 	public static void main(String[] args) {
