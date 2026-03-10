@@ -2,128 +2,107 @@ package com.apps.quantitymeasurement;
 
 public class QuantityMeasurementApp {
 
-    public static <U extends IMeasurable> boolean demonstrateEquality(
-            Quantity<U> q1,
-            Quantity<U> q2) {
+	public static <U extends IMeasurable> boolean demonstrateEquality(Quantity<U> q1, Quantity<U> q2) {
 
-        boolean result = q1.equals(q2);
+		boolean result = q1.equals(q2);
 
-        System.out.println(q1 + " == " + q2 + " ? " + result);
+		System.out.println(q1 + " == " + q2 + " ? " + result);
 
-        return result;
-    }
+		return result;
+	}
 
-    public static <U extends IMeasurable> Quantity<U> demonstrateConversion(
-            Quantity<U> quantity,
-            U targetUnit) {
+	public static <U extends IMeasurable> Quantity<U> demonstrateConversion(Quantity<U> quantity, U targetUnit) {
 
-        Quantity<U> result = quantity.convertTo(targetUnit);
+		Quantity<U> result = quantity.convertTo(targetUnit);
 
-        System.out.println(quantity + " -> " + result);
+		System.out.println(quantity + " -> " + result);
 
-        return result;
-    }
+		return result;
+	}
 
-    public static <U extends IMeasurable> Quantity<U> demonstrateAddition(
-            Quantity<U> q1,
-            Quantity<U> q2) {
+	public static <U extends IMeasurable> Quantity<U> demonstrateAddition(Quantity<U> q1, Quantity<U> q2) {
 
-        Quantity<U> result = q1.add(q2);
+		Quantity<U> result = q1.add(q2);
 
-        System.out.println(q1 + " + " + q2 + " = " + result);
+		System.out.println(q1 + " + " + q2 + " = " + result);
 
-        return result;
-    }
+		return result;
+	}
 
-    public static <U extends IMeasurable> Quantity<U> demonstrateAddition(
-            Quantity<U> q1,
-            Quantity<U> q2,
-            U targetUnit) {
+	public static <U extends IMeasurable> Quantity<U> demonstrateAddition(Quantity<U> q1, Quantity<U> q2,
+			U targetUnit) {
 
-        Quantity<U> result = q1.add(q2, targetUnit);
+		Quantity<U> result = q1.add(q2, targetUnit);
 
-        System.out.println(q1 + " + " + q2 + " = " + result);
+		System.out.println(q1 + " + " + q2 + " = " + result);
 
-        return result;
-    }
-    
-    public static <U extends IMeasurable> Quantity<U>
-    demonstrateSubtraction(Quantity<U> q1, Quantity<U> q2) {
+		return result;
+	}
 
-        Quantity<U> result = q1.subtract(q2);
+	public static <U extends IMeasurable> Quantity<U> demonstrateSubtraction(Quantity<U> q1, Quantity<U> q2) {
 
-        System.out.println(q1 + " - " + q2 + " = " + result);
+		Quantity<U> result = q1.subtract(q2);
 
-        return result;
-    }
-    
-    public static <U extends IMeasurable> double
-    demonstrateDivision(Quantity<U> q1, Quantity<U> q2) {
+		System.out.println(q1 + " - " + q2 + " = " + result);
 
-        double result = q1.divide(q2);
+		return result;
+	}
 
-        System.out.println(q1 + " / " + q2 + " = " + result);
+	public static <U extends IMeasurable> double demonstrateDivision(Quantity<U> q1, Quantity<U> q2) {
 
-        return result;
-    }
+		double result = q1.divide(q2);
 
-    public static void main(String[] args) {
+		System.out.println(q1 + " / " + q2 + " = " + result);
 
-        Quantity<LengthUnit> l1 =
-                new Quantity<>(1, LengthUnit.FEET);
+		return result;
+	}
 
-        Quantity<LengthUnit> l2 =
-                new Quantity<>(12, LengthUnit.INCHES);
+	public static void main(String[] args) {
 
-        demonstrateEquality(l1, l2);
+		Quantity<LengthUnit> l1 = new Quantity<>(1, LengthUnit.FEET);
 
-        demonstrateConversion(l1, LengthUnit.YARDS);
+		Quantity<LengthUnit> l2 = new Quantity<>(12, LengthUnit.INCHES);
 
-        demonstrateAddition(l1, l2);
+		demonstrateEquality(l1, l2);
 
-        demonstrateAddition(l1, l2, LengthUnit.YARDS);
+		demonstrateConversion(l1, LengthUnit.YARDS);
 
+		demonstrateAddition(l1, l2);
 
-        Quantity<WeightUnit> w1 =
-                new Quantity<>(1, WeightUnit.KILOGRAM);
+		demonstrateAddition(l1, l2, LengthUnit.YARDS);
 
-        Quantity<WeightUnit> w2 =
-                new Quantity<>(1000, WeightUnit.GRAM);
+		Quantity<WeightUnit> w1 = new Quantity<>(1, WeightUnit.KILOGRAM);
 
-        demonstrateEquality(w1, w2);
+		Quantity<WeightUnit> w2 = new Quantity<>(1000, WeightUnit.GRAM);
 
-        demonstrateConversion(w1, WeightUnit.POUND);
+		demonstrateEquality(w1, w2);
 
-        demonstrateAddition(w1, w2);
+		demonstrateConversion(w1, WeightUnit.POUND);
 
-        demonstrateAddition(w1, w2, WeightUnit.POUND);
-        
-        
-        Quantity<VolumeUnit> v1 =
-                new Quantity<>(1, VolumeUnit.LITRE);
+		demonstrateAddition(w1, w2);
 
-        Quantity<VolumeUnit> v2 =
-                new Quantity<>(1000, VolumeUnit.MILLILITRE);
+		demonstrateAddition(w1, w2, WeightUnit.POUND);
 
-        Quantity<VolumeUnit> v3 =
-                new Quantity<>(1, VolumeUnit.GALLON);
+		Quantity<VolumeUnit> v1 = new Quantity<>(1, VolumeUnit.LITRE);
 
-        demonstrateEquality(v1, v2);
+		Quantity<VolumeUnit> v2 = new Quantity<>(1000, VolumeUnit.MILLILITRE);
 
-        demonstrateConversion(v1, VolumeUnit.MILLILITRE);
+		Quantity<VolumeUnit> v3 = new Quantity<>(1, VolumeUnit.GALLON);
 
-        demonstrateAddition(v1, v2);
+		demonstrateEquality(v1, v2);
 
-        demonstrateAddition(v1, v3, VolumeUnit.MILLILITRE);
-        
-        Quantity<VolumeUnit> v5 =
-                new Quantity<>(5, VolumeUnit.LITRE);
+		demonstrateConversion(v1, VolumeUnit.MILLILITRE);
 
-        Quantity<VolumeUnit> v6 =
-                new Quantity<>(2, VolumeUnit.LITRE);
+		demonstrateAddition(v1, v2);
 
-        demonstrateSubtraction(v5, v6);
+		demonstrateAddition(v1, v3, VolumeUnit.MILLILITRE);
 
-        demonstrateDivision(v5, v6);
-    }
+		Quantity<VolumeUnit> v5 = new Quantity<>(5, VolumeUnit.LITRE);
+
+		Quantity<VolumeUnit> v6 = new Quantity<>(2, VolumeUnit.LITRE);
+
+		demonstrateSubtraction(v5, v6);
+
+		demonstrateDivision(v5, v6);
+	}
 }
