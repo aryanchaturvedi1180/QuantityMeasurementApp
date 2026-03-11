@@ -104,5 +104,24 @@ public class QuantityMeasurementApp {
 		demonstrateSubtraction(v5, v6);
 
 		demonstrateDivision(v5, v6);
+
+		Quantity<LengthUnit> ll1 = new Quantity<>(5, LengthUnit.FEET);
+		Quantity<LengthUnit> ll2 = new Quantity<>(24, LengthUnit.INCHES);
+
+		System.out.println("Addition: " + ll1.add(ll2));
+
+		Quantity<TemperatureUnit> t1 = new Quantity<>(100, TemperatureUnit.CELSIUS);
+
+		Quantity<TemperatureUnit> t2 = new Quantity<>(212, TemperatureUnit.FAHRENHEIT);
+
+		System.out.println("Temperature Equal: " + t1.equals(t2));
+
+		System.out.println("Converted: " + t2.convertTo(TemperatureUnit.CELSIUS));
+
+		try {
+			t1.add(t2);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
 	}
 }
