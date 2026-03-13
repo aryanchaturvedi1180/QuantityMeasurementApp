@@ -40,4 +40,16 @@ public class QuantityMeasurementEntity implements Serializable {
     public String getMessage() {
         return message;
     }
+    
+    public String getOperation() {
+        return operation;
+    }
+
+    public double getOperand1() {
+        return operand1;
+    }
+
+    public double getOperand2() {
+        return operand2;
+    }
 }

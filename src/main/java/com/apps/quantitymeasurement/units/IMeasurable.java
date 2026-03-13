@@ -1,10 +1,5 @@
 package com.apps.quantitymeasurement.units;
 
-@FunctionalInterface
-interface SupportsArithmetic {
-    boolean isSupported();
-}
-
 public interface IMeasurable {
 
     double convertToBaseUnit(double value);
@@ -13,17 +8,7 @@ public interface IMeasurable {
 
     String getUnitName();
 
-    double getConversionFactor();   // method declaration
+    double getConversionFactor();
 
-    default boolean supportsArithmetic() {
-        return true;
-    }
-
-    default void validateOperationSupport(String operation) {
-        if (!supportsArithmetic()) {
-            throw new UnsupportedOperationException(
-                    operation + " operation not supported for this unit"
-            );
-        }
-    }
+    boolean supportsArithmetic();
 }

@@ -1,53 +1,40 @@
 package com.apps.quantitymeasurement.units;
 
-import java.util.function.Function;
-
 public enum TemperatureUnit implements IMeasurable {
 
-	CELSIUS(c -> c, c -> c, "Celsius"),
+    CELSIUS,
+    FAHRENHEIT;
 
-	FAHRENHEIT(f -> (f - 32) * 5 / 9, c -> (c * 9 / 5) + 32, "Fahrenheit");
+    @Override
+    public double convertToBaseUnit(double value) {
 
-	private final Function<Double, Double> toCelsius;
-	private final Function<Double, Double> fromCelsius;
-	private final String name;
+        if(this == FAHRENHEIT)
+            return (value - 32) * 5 / 9;
 
-	SupportsArithmetic supportsArithmetic = () -> false;
+        return value;
+    }
 
-	TemperatureUnit(Function<Double, Double> toCelsius, Function<Double, Double> fromCelsius, String name) {
+    @Override
+    public double convertFromBaseUnit(double value) {
 
-		this.toCelsius = toCelsius;
-		this.fromCelsius = fromCelsius;
-		this.name = name;
-	}
+        if(this == FAHRENHEIT)
+            return (value * 9 / 5) + 32;
 
-	@Override
-	public double convertToBaseUnit(double value) {
-		return toCelsius.apply(value);
-	}
+        return value;
+    }
 
-	@Override
-	public double convertFromBaseUnit(double value) {
-		return fromCelsius.apply(value);
-	}
+    @Override
+    public String getUnitName() {
+        return name();
+    }
 
-	@Override
-	public String getUnitName() {
-		return name;
-	}
+    @Override
+    public double getConversionFactor() {
+        return 1;
+    }
 
-	@Override
-	public boolean supportsArithmetic() {
-		return supportsArithmetic.isSupported();
-	}
-
-	@Override
-	public void validateOperationSupport(String operation) {
-		throw new UnsupportedOperationException("Temperature does not support " + operation + " operation");
-	}
-
-	@Override
-	public double getConversionFactor() {
-		return 1; // safe neutral value
-	}
+    @Override
+    public boolean supportsArithmetic() {
+        return false;
+    }
 }

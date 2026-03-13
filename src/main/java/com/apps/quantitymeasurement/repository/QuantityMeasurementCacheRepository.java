@@ -12,7 +12,7 @@ public class QuantityMeasurementCacheRepository
 
     private List<QuantityMeasurementEntity> cache = new ArrayList<>();
 
-    private QuantityMeasurementCacheRepository() {}
+    public QuantityMeasurementCacheRepository() {}
 
     public static QuantityMeasurementCacheRepository getInstance() {
         if (instance == null) {
@@ -29,5 +29,10 @@ public class QuantityMeasurementCacheRepository
     @Override
     public List<QuantityMeasurementEntity> findAll() {
         return cache;
+    }
+
+    @Override
+    public void deleteAllMeasurements() {
+        cache.clear();
     }
 }
