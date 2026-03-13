@@ -1,142 +1,274 @@
 package com.apps.quantitymeasurement;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import com.apps.quantitymeasurement.Quantity.ArithmeticOperation;
-
-import static org.junit.jupiter.api.Assertions.*;
+import com.apps.quantitymeasurement.dto.QuantityDTO;
+import com.apps.quantitymeasurement.repository.QuantityMeasurementCacheRepository;
+import com.apps.quantitymeasurement.service.QuantityMeasurementServiceImpl;
 
 public class QuantityMeasurementAppTest {
 
-	private static final double EPSILON = 0.01;
+	private QuantityMeasurementServiceImpl service;
+
+	@BeforeEach
+	void setUp() {
+		service = new QuantityMeasurementServiceImpl(QuantityMeasurementCacheRepository.getInstance());
+	}
+
+	// ---------------- COMPARISON TESTS ----------------
 
 	@Test
-	void testTemperatureEquality_CelsiusToCelsius_SameValue() {
-		assertEquals(new Quantity<>(0.0, TemperatureUnit.CELSIUS), new Quantity<>(0.0, TemperatureUnit.CELSIUS));
+	void testFeetEqualsInches() {
+		QuantityDTO q1 = new QuantityDTO(1.0, "FEET", "LENGTH");
+		QuantityDTO q2 = new QuantityDTO(12.0, "INCHES", "LENGTH");
+
+		assertTrue(service.compare(q1, q2));
 	}
 
 	@Test
-	void testTemperatureEquality_FahrenheitToFahrenheit_SameValue() {
-		assertEquals(new Quantity<>(32.0, TemperatureUnit.FAHRENHEIT),
-				new Quantity<>(32.0, TemperatureUnit.FAHRENHEIT));
+	void testFeetNotEqualsDifferentLength() {
+		QuantityDTO q1 = new QuantityDTO(1.0, "FEET", "LENGTH");
+		QuantityDTO q2 = new QuantityDTO(24.0, "INCHES", "LENGTH");
+
+		assertFalse(service.compare(q1, q2));
 	}
 
 	@Test
-	void testTemperatureEquality_CelsiusToFahrenheit_Negative40Equal() {
-		assertEquals(new Quantity<>(-40.0, TemperatureUnit.CELSIUS), new Quantity<>(-40.0, TemperatureUnit.FAHRENHEIT));
+	void testSameValuesEqual() {
+		QuantityDTO q1 = new QuantityDTO(5.0, "FEET", "LENGTH");
+		QuantityDTO q2 = new QuantityDTO(5.0, "FEET", "LENGTH");
+
+		assertTrue(service.compare(q1, q2));
 	}
 
 	@Test
-	void testTemperatureEquality_ReflexiveProperty() {
-		Quantity<TemperatureUnit> a = new Quantity<>(50.0, TemperatureUnit.CELSIUS);
+	void testCompareNullFirst() {
+		QuantityDTO q2 = new QuantityDTO(12.0, "INCHES", "LENGTH");
 
-		assertTrue(a.equals(a));
-	}
-
-	// -------- Conversion Tests --------
-
-	@Test
-	void testTemperatureConversion_RoundTrip_PreservesValue() {
-
-		Quantity<TemperatureUnit> original = new Quantity<>(20.0, TemperatureUnit.CELSIUS);
-
-		Quantity<TemperatureUnit> converted = original.convertTo(TemperatureUnit.FAHRENHEIT)
-				.convertTo(TemperatureUnit.CELSIUS);
-
-		assertEquals(original.getValue(), converted.getValue(), EPSILON);
+		assertThrows(IllegalArgumentException.class, () -> service.compare(null, q2));
 	}
 
 	@Test
-	void testTemperatureConversion_SameUnit() {
+	void testCompareNullSecond() {
+		QuantityDTO q1 = new QuantityDTO(1.0, "FEET", "LENGTH");
 
-		Quantity<TemperatureUnit> q = new Quantity<>(25.0, TemperatureUnit.CELSIUS);
-
-		Quantity<TemperatureUnit> result = q.convertTo(TemperatureUnit.CELSIUS);
-
-		assertEquals(25.0, result.getValue(), EPSILON);
+		assertThrows(IllegalArgumentException.class, () -> service.compare(q1, null));
 	}
 
-	// -------- Unsupported Operations --------
+	// ---------------- ADDITION TESTS ----------------
 
 	@Test
-	void testTemperatureUnsupportedOperation_Add() {
+	void testAdditionFeetAndInches() {
+		QuantityDTO q1 = new QuantityDTO(1.0, "FEET", "LENGTH");
+		QuantityDTO q2 = new QuantityDTO(12.0, "INCHES", "LENGTH");
 
-		Quantity<TemperatureUnit> t1 = new Quantity<>(100.0, TemperatureUnit.CELSIUS);
+		QuantityDTO result = service.add(q1, q2);
 
-		Quantity<TemperatureUnit> t2 = new Quantity<>(50.0, TemperatureUnit.CELSIUS);
-
-		assertThrows(UnsupportedOperationException.class, () -> t1.add(t2));
+		assertEquals(13.0, result.getValue());
 	}
 
 	@Test
-	void testTemperatureUnsupportedOperation_Subtract() {
+	void testAdditionSameUnit() {
+		QuantityDTO q1 = new QuantityDTO(5.0, "FEET", "LENGTH");
+		QuantityDTO q2 = new QuantityDTO(3.0, "FEET", "LENGTH");
 
-		Quantity<TemperatureUnit> t1 = new Quantity<>(100.0, TemperatureUnit.CELSIUS);
+		QuantityDTO result = service.add(q1, q2);
 
-		Quantity<TemperatureUnit> t2 = new Quantity<>(50.0, TemperatureUnit.CELSIUS);
-
-		assertThrows(UnsupportedOperationException.class, () -> t1.subtract(t2));
+		assertEquals(8.0, result.getValue());
 	}
 
 	@Test
-	void testTemperatureUnsupportedOperation_Divide() {
+	void testAdditionWithZero() {
+		QuantityDTO q1 = new QuantityDTO(5.0, "FEET", "LENGTH");
+		QuantityDTO q2 = new QuantityDTO(0.0, "FEET", "LENGTH");
 
-		Quantity<TemperatureUnit> t1 = new Quantity<>(100.0, TemperatureUnit.CELSIUS);
+		QuantityDTO result = service.add(q1, q2);
 
-		Quantity<TemperatureUnit> t2 = new Quantity<>(50.0, TemperatureUnit.CELSIUS);
-
-		assertThrows(UnsupportedOperationException.class, () -> t1.divide(t2));
-	}
-
-	// -------- Incompatibility Tests --------
-
-	@Test
-	void testTemperatureVsLengthIncompatibility() {
-
-		Quantity<TemperatureUnit> temp = new Quantity<>(100.0, TemperatureUnit.CELSIUS);
-
-		Quantity<LengthUnit> length = new Quantity<>(100.0, LengthUnit.FEET);
-
-		assertFalse(temp.equals(length));
-	}
-
-	// -------- Enum Behaviour --------
-
-	@Test
-	void testTemperatureUnit_AllConstants() {
-
-		assertNotNull(TemperatureUnit.CELSIUS);
-		assertNotNull(TemperatureUnit.FAHRENHEIT);
+		assertEquals(5.0, result.getValue());
 	}
 
 	@Test
-	void testTemperatureUnit_NameMethod() {
+	void testAdditionLargeNumbers() {
+		QuantityDTO q1 = new QuantityDTO(1000000, "FEET", "LENGTH");
+		QuantityDTO q2 = new QuantityDTO(2000000, "FEET", "LENGTH");
 
-		assertEquals("Celsius", TemperatureUnit.CELSIUS.getUnitName());
+		QuantityDTO result = service.add(q1, q2);
 
-		assertEquals("Fahrenheit", TemperatureUnit.FAHRENHEIT.getUnitName());
+		assertEquals(3000000, result.getValue());
 	}
 
 	@Test
-	void testTemperatureUnit_ConversionFactor() {
+	void testAdditionNegativeNumbers() {
+		QuantityDTO q1 = new QuantityDTO(-5, "FEET", "LENGTH");
+		QuantityDTO q2 = new QuantityDTO(3, "FEET", "LENGTH");
 
-		assertEquals(1.0, TemperatureUnit.CELSIUS.getConversionFactor());
+		QuantityDTO result = service.add(q1, q2);
+
+		assertEquals(-2, result.getValue());
 	}
 
-	// -------- Validation --------
+	// ---------------- SUBTRACTION TESTS ----------------
 
 	@Test
-	void testTemperatureNullUnitValidation() {
+	void testSubtractionNormal() {
+		QuantityDTO q1 = new QuantityDTO(10, "FEET", "LENGTH");
+		QuantityDTO q2 = new QuantityDTO(5, "FEET", "LENGTH");
 
-		assertThrows(IllegalArgumentException.class, () -> new Quantity<>(100.0, null));
+		QuantityDTO result = service.subtract(q1, q2);
+
+		assertEquals(5, result.getValue());
 	}
 
 	@Test
-	void testTemperatureNullOperandValidation_InComparison() {
+	void testSubtractionNegativeResult() {
+		QuantityDTO q1 = new QuantityDTO(5, "FEET", "LENGTH");
+		QuantityDTO q2 = new QuantityDTO(10, "FEET", "LENGTH");
 
-		Quantity<TemperatureUnit> q = new Quantity<>(10.0, TemperatureUnit.CELSIUS);
+		QuantityDTO result = service.subtract(q1, q2);
 
-		assertFalse(q.equals(null));
+		assertEquals(-5, result.getValue());
+	}
+
+	@Test
+	void testSubtractionZeroResult() {
+		QuantityDTO q1 = new QuantityDTO(5, "FEET", "LENGTH");
+		QuantityDTO q2 = new QuantityDTO(5, "FEET", "LENGTH");
+
+		QuantityDTO result = service.subtract(q1, q2);
+
+		assertEquals(0, result.getValue());
+	}
+
+	@Test
+	void testSubtractionWithZero() {
+		QuantityDTO q1 = new QuantityDTO(5, "FEET", "LENGTH");
+		QuantityDTO q2 = new QuantityDTO(0, "FEET", "LENGTH");
+
+		QuantityDTO result = service.subtract(q1, q2);
+
+		assertEquals(5, result.getValue());
+	}
+
+	@Test
+	void testSubtractionDecimalValues() {
+		QuantityDTO q1 = new QuantityDTO(5.5, "FEET", "LENGTH");
+		QuantityDTO q2 = new QuantityDTO(2.5, "FEET", "LENGTH");
+
+		QuantityDTO result = service.subtract(q1, q2);
+
+		assertEquals(3.0, result.getValue());
+	}
+
+	// ---------------- DIVISION TESTS ----------------
+
+	@Test
+	void testDivisionNormal() {
+		QuantityDTO q1 = new QuantityDTO(10, "FEET", "LENGTH");
+		QuantityDTO q2 = new QuantityDTO(2, "FEET", "LENGTH");
+
+		assertEquals(5, service.divide(q1, q2));
+	}
+
+	@Test
+	void testDivisionDecimalResult() {
+		QuantityDTO q1 = new QuantityDTO(10, "FEET", "LENGTH");
+		QuantityDTO q2 = new QuantityDTO(4, "FEET", "LENGTH");
+
+		assertEquals(2.5, service.divide(q1, q2));
+	}
+
+	@Test
+	void testDivisionOne() {
+		QuantityDTO q1 = new QuantityDTO(10, "FEET", "LENGTH");
+		QuantityDTO q2 = new QuantityDTO(10, "FEET", "LENGTH");
+
+		assertEquals(1, service.divide(q1, q2));
+	}
+
+	@Test
+	void testDivisionByZero() {
+		QuantityDTO q1 = new QuantityDTO(10, "FEET", "LENGTH");
+		QuantityDTO q2 = new QuantityDTO(0, "FEET", "LENGTH");
+
+		assertThrows(ArithmeticException.class, () -> service.divide(q1, q2));
+	}
+
+	@Test
+	void testDivisionZeroNumerator() {
+		QuantityDTO q1 = new QuantityDTO(0, "FEET", "LENGTH");
+		QuantityDTO q2 = new QuantityDTO(5, "FEET", "LENGTH");
+
+		assertEquals(0, service.divide(q1, q2));
+	}
+
+	// ---------------- CONVERSION TESTS ----------------
+
+	@Test
+	void testConvertFeetToInches() {
+		QuantityDTO q = new QuantityDTO(1, "FEET", "LENGTH");
+
+		QuantityDTO result = service.convert(q, "INCHES");
+
+		assertEquals("INCHES", result.getUnit());
+	}
+
+	@Test
+	void testConvertFeetToFeet() {
+		QuantityDTO q = new QuantityDTO(5, "FEET", "LENGTH");
+
+		QuantityDTO result = service.convert(q, "FEET");
+
+		assertEquals("FEET", result.getUnit());
+	}
+
+	@Test
+	void testConvertNullInput() {
+		assertThrows(IllegalArgumentException.class, () -> service.convert(null, "INCHES"));
+	}
+
+	@Test
+	void testConvertLargeValue() {
+		QuantityDTO q = new QuantityDTO(10000, "FEET", "LENGTH");
+
+		QuantityDTO result = service.convert(q, "INCHES");
+
+		assertEquals("INCHES", result.getUnit());
+	}
+
+	// ---------------- EDGE CASE TESTS ----------------
+
+	@Test
+	void testVerySmallValues() {
+		QuantityDTO q1 = new QuantityDTO(0.001, "FEET", "LENGTH");
+		QuantityDTO q2 = new QuantityDTO(0.0005, "FEET", "LENGTH");
+
+		QuantityDTO result = service.subtract(q1, q2);
+
+		assertEquals(0.0005, result.getValue());
+	}
+
+	@Test
+	void testNegativeComparison() {
+		QuantityDTO q1 = new QuantityDTO(-5, "FEET", "LENGTH");
+		QuantityDTO q2 = new QuantityDTO(-5, "FEET", "LENGTH");
+
+		assertTrue(service.compare(q1, q2));
+	}
+
+	@Test
+	void testLargeSubtraction() {
+		QuantityDTO q1 = new QuantityDTO(1000000, "FEET", "LENGTH");
+		QuantityDTO q2 = new QuantityDTO(500000, "FEET", "LENGTH");
+
+		QuantityDTO result = service.subtract(q1, q2);
+
+		assertEquals(500000, result.getValue());
 	}
 
 }
