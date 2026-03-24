@@ -10,7 +10,8 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleCustomException(QuantityMeasurementException ex){
         return ResponseEntity.badRequest().body(ex.getMessage());
     }
-
+    
+    
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleGeneralException(Exception ex){
         return ResponseEntity.internalServerError().body("Something went wrong");

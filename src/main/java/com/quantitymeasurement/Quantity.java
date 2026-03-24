@@ -91,7 +91,7 @@ public class Quantity<U extends IMeasurable>{
 
         if(this.unit.getClass()!=other.unit.getClass())
             throw new IllegalArgumentException(
-                    "Cannot perform arithmetic between different measurement categories: "
+                    "Cannot perform arithmetic between different measurement categories:  "
                     +this.unit.getClass().getSimpleName()+" and "
                     +other.unit.getClass().getSimpleName()
             );

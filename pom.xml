@@ -4,7 +4,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 
-	<!-- ✅ Spring Boot Parent -->
+	<!-- Spring Boot Parent -->
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -20,13 +20,13 @@
 	<description>Quantity Measurement Application using TDD approach</description>
 	<packaging>jar</packaging>
 
-	<!-- ✅ Java Version -->
+	<!--Java Version -->
 	<properties>
 		<java.version>17</java.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
-	<!-- ✅ Dependencies -->
+	<!-- Dependencies -->
 	<dependencies>
 
 		<!-- Spring Boot Web -->
@@ -75,7 +75,7 @@
 		</dependency>
 	</dependencies>
 
-	<!-- ✅ Build Plugin -->
+	<!-- Build Plugin -->
 	<build>
 		<plugins>
 			<plugin>

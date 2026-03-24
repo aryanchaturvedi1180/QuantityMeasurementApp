@@ -49,4 +49,10 @@ public class QuantityMeasurementController {
     public long getCount(@PathVariable String operation){
         return service.getCount(operation);
     }
+    
+    @DeleteMapping("/{id}")
+    public String deleteById(@PathVariable Long id) {
+        service.deleteById(id);
+        return "Record deleted successfully with id: " + id;
+    }
 }
