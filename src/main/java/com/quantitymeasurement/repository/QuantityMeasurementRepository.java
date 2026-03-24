@@ -10,6 +10,5 @@ public interface QuantityMeasurementRepository extends JpaRepository<QuantityMea
 
     List<QuantityMeasurementEntity> findByOperationIgnoreCase(String operation);
 
-    long countByOperation(String operation);
-	
+    long countByOperation(String operation);	
 }

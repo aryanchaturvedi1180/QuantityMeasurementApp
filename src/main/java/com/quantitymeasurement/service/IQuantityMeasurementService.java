@@ -19,4 +19,6 @@ public interface IQuantityMeasurementService {
     List<QuantityMeasurementEntity> getHistory(String operation);
 
     long getCount(String operation);
+    
+    void deleteById(Long id);
 }

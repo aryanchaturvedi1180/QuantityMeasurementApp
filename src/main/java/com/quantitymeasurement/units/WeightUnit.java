@@ -31,7 +31,6 @@ public enum WeightUnit implements IMeasurable {
     public double getConversionFactor() {
         return conversionFactor;
     }
-
     @Override
     public boolean supportsArithmetic() {
         return true;
