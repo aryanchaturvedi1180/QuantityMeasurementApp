@@ -1,39 +1,68 @@
 package com.quantitymeasurement.units;
 
+import java.util.function.Function;
 public enum TemperatureUnit implements IMeasurable {
 
-    CELSIUS, FAHRENHEIT;
+	CELSIUS(false), FAHRENHEIT(true);
 
-    @Override
-    public double convertToBaseUnit(double value) {
+	private final boolean isFahrenheit;
 
-        if(this == FAHRENHEIT)
-            return (value - 32) * 5 / 9;
+	private final Function<Double, Double> conversionValue;
 
-        return value;
-    }
+	SupportsArithmetic supportsArithmetic = () -> false;
 
-    @Override
-    public double convertFromBaseUnit(double value) {
+	TemperatureUnit(boolean isFahrenheit) {
 
-        if(this == FAHRENHEIT)
-            return (value * 9 / 5) + 32;
+		this.isFahrenheit = isFahrenheit;
 
-        return value;
-    }
+		if (isFahrenheit) {
+			conversionValue = (f) -> (f - 32) * 5 / 9;
+		} 
+		else {
+			conversionValue = (c) -> c;
+		}
+	}
 
-    @Override
-    public String getUnitName() {
-        return name();
-    }
+	@Override
+	public String getUnitName() {
+		return this.name();
+	}
 
-    @Override
-    public double getConversionFactor() {
-        return 1;
-    }
+	@Override
+	public double getConversionFactor() {
+		return 1.0;
+	}
 
-    @Override
-    public boolean supportsArithmetic() {
-        return false;
-    }
+	@Override
+	public double convertToBaseUnit(double value) {
+		return conversionValue.apply(value);
+	}
+
+	@Override
+	public double convertFromBaseUnit(double baseValue) {
+
+		if (isFahrenheit)
+			return (baseValue * 9 / 5) + 32;
+
+		return baseValue;
+	}
+
+	public double convertTo(double value, TemperatureUnit targetUnit) {
+
+		double base = convertToBaseUnit(value);
+		return targetUnit.convertFromBaseUnit(base);
+	}
+
+	@Override
+	public boolean supportsArithmetic() {
+		return supportsArithmetic.isSupported();
+	}
+
+	@Override
+	public void validateOperationSupport(String operation) {
+
+		if (!supportsArithmetic()) {
+			throw new UnsupportedOperationException("Temperature does not support " + operation + " operations");
+		}
+	}
 }
