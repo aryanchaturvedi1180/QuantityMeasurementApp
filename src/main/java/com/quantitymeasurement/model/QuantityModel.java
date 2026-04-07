@@ -2,22 +2,21 @@ package com.quantitymeasurement.model;
 
 import com.quantitymeasurement.units.IMeasurable;
 
-public class QuantityModel<U extends IMeasurable> {
+public class QuantityModel<U extends IMeasurable>{
 
     private double value;
     private U unit;
 
-    public QuantityModel(double value, U unit) {
-        this.value = value;
-        this.unit = unit;
+    public QuantityModel(double value,U unit){
+        this.value=value;
+        this.unit=unit;
     }
 
-    public double getValue() {
+    public double getValue(){
         return value;
     }
 
-    
-    public U getUnit() {
+    public U getUnit(){
         return unit;
     }
 }
