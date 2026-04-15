@@ -1,4 +1,4 @@
-# **QuantityMeasurementApp**
+# **Quantity Measurement App**
 
 ## Overview
 
@@ -213,3 +213,6 @@ QuantityMeasurementApp/
 * Use REST APIs and JPA
 * Improve development and scalability
 
+=======
+# Quantity Measurement App
+>>>>>>> feature/UC21-Microservices
